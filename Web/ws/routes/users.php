@@ -1,22 +1,10 @@
 <?php
 require_once __DIR__ . '/../config/database.php';
-require_once __DIR__ . '/../core/response.php';
-require_once __DIR__ . '/../core/auth.php';
 
 // GET: listar usuarios
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
 	// Comprobar token
     try {
-		$headers = getallheaders();
-		$authHeader = $headers['Authorization'] ?? '';
-		if (!$authHeader || !str_starts_with($authHeader, 'Bearer ')) {
-			jsonResponse(['error'=>'Token no proporcionado'], 401);
-		}
-		$token = substr($authHeader, 7);
-		$userData = verifyToken($token);
-		if(!$userData) {
-			jsonResponse(['error'=>'Token inválido o expirado'], 401);
-		}
         $stmt = db()->query("SELECT id, nombre, correo FROM usuarios");
         $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
