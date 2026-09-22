@@ -7,11 +7,8 @@ from sqlalchemy.orm import Session
 from sqlalchemy.sql.functions import current_user
 
 from app.api import deps
-from app.core.security import get_password_hash, generar_token
 from app.models import tbl_users, tbl_formulario
-from app.schemas import User
 from app.schemas.form import FormBase, Form, FormNew, FormNewBody
-from app.schemas.user import UserBase, UserNew, UserEdit
 
 router = APIRouter()
 
@@ -27,7 +24,7 @@ def get_forms_list(
     return [r for r in db.query(tbl_formulario).filter(tbl_formulario.fkCreador == current_user.id).filter(or_(tbl_formulario.fldSDescripcion.like('%'+patron+'%'), tbl_formulario.fldSTitulo.like('%'+patron+'%'))).order_by(tbl_formulario.fldDCreacion.desc()).limit(limit).offset(offset).all()]
 
 
-@router.get("/{id}", response_model=FormBase)
+@router.get("/{id}", response_model=Form)
 def get_by_id(
         *,
         id: int,
