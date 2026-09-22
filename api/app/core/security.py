@@ -1,3 +1,5 @@
+import secrets
+import string
 from datetime import datetime, timedelta
 from typing import Any, Union
 
@@ -29,3 +31,8 @@ def verify_password(plain_password: str, hashed_password: str) -> bool:
 
 def get_password_hash(password: str) -> str:
     return pwd_context.hash(password)
+
+def generar_token(longitud):
+    caracteres = string.ascii_uppercase + string.digits
+    token = ''.join(secrets.choice(caracteres) for _ in range(longitud))
+    return token

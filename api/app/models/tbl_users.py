@@ -11,3 +11,5 @@ class tbl_users(Base):
     fldSLogo = Column(String)
     fldSColor1 = Column(String)
     fldSColor2 = Column(String)
+    fldSUsername = Column(String)
+    fldBActive = Column(Integer)

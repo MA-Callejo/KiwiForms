@@ -35,20 +35,17 @@ def login_access_token(
     user = db.query(tbl_users).filter(or_(tbl_users.fldSCorreo == form_data.username, tbl_users.fldSNombre == form_data.username)).first()
     if not user:
         raise HTTPException(status_code=400, detail="Incorrect email or password")
-    if not user.fldSHashPass:
-        raise HTTPException(status_code=403, detail="Incorrect email or password")
     if not verify_password(form_data.password, user.fldSHashPass):
         raise HTTPException(status_code=400, detail="Incorrect email or password")
-    access_token_expires = timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES)
-    db.close()
-    id = user.id
+    if not user.fldBActive:
+        raise HTTPException(status_code=400, detail="Inactive User")
     return {
         "access_token": security.create_access_token(
-            subject=id
+            subject=user.id
         ),
         "token_type": "bearer",
         "email": user.fldSCorreo,
-        "user": id
+        "user": user.id
     }
 
 
